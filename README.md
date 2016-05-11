@@ -9,3 +9,4 @@ docker pull nukesz/<subfolder>
 
 - **java** (Ubuntu with java 8)
 - **wildfly** (WildFly 10.0.0.Final)
+- **payara** (Payara 4.1.1.161.1 Full)
