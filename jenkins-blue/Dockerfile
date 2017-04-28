@@ -1,22 +1,12 @@
-FROM jenkins:latest
+FROM jenkinsci/jenkins:latest
 
 USER root
 
-RUN install-plugins.sh antisamy-markup-formatter matrix-auth pipeline-model-definition blueocean:$BLUEOCEAN_VERSION
+RUN install-plugins.sh antisamy-markup-formatter matrix-auth pipeline-model-definition blueocean:$BLUEOCEAN_VERSION greenballs
 
-ENV MAVEN_VERSION 3.3.9
-ENV MAVEN_HOME /usr/lib/maven
-ENV PATH /usr/lib/maven/bin:$JAVA_HOME/bin:$PATH
-
-RUN apk --no-cache add --virtual build-dependencies wget && \
-    cd /tmp && \
-    wget -q http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz -O - | tar xzf - && \
-    mv /tmp/apache-maven-$MAVEN_VERSION /usr/lib/maven && \
-    ln -s /usr/lib/maven/bin/mvn /usr/bin/mvn && \
-    rm -rf /tmp/* && \
-    apk del --purge build-dependencies
-  
-USER jenkins
-
-
-  
+RUN apt-get update \
+  && apt-get install -y apt-transport-https ca-certificates \
+  && echo "deb https://apt.dockerproject.org/repo debian-jessie main" > /etc/apt/sources.list.d/docker.list \
+  && apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D \
+  && apt-get update \
+  && apt-get install -y docker-engine
